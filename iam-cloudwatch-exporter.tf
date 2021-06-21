@@ -26,9 +26,8 @@ data "aws_iam_policy_document" "cloudwatch_exporter_document" {
 
   statement {
     actions = [
-      "cloudwatch:Describe*",
-      "cloudwatch:List*",
-      "cloudwatch:Get*",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:GetMetricStatistics",
       "tag:GetResources"
     ]
 
