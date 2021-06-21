@@ -1,13 +1,8 @@
 resource "aws_iam_user" "cloudwatch_exporter" {
-  name  = "${var.name}-cloudwatch-exporter"
+  name  = "${var.name}-cloudwatch-metrics-exporter"
   path  = "/"
 
   tags = var.tags
-}
-
-resource "aws_iam_access_key" "cloudwatch_exporter" {
-  user    = aws_iam_user.cloudwatch_exporter.name
-  pgp_key = data.aws_ssm_parameter.kinesis_users_public_key.value
 }
 
 resource "aws_iam_user_policy_attachment" "cloudwatch_exporter_policy" {
@@ -35,4 +30,10 @@ data "aws_iam_policy_document" "cloudwatch_exporter_document" {
       "*"
     ]
   }
+}
+
+module "self_serve_access_keys" {
+  source = "git::https://github.com/UKHomeOffice/acp-tf-self-serve-access-keys?ref=v0.1.0"
+
+  user_names = [aws_iam_user.cloudwatch_exporter.name]
 }
